@@ -1,0 +1,11 @@
+include("@CMAKE_BINARY_DIR@/CPackConfig.cmake")
+
+set(CPACK_COMPONENTS_ALL kwin)
+set(CPACK_PACKAGING_INSTALL_PREFIX "/usr")
+set(CPACK_PACKAGE_NAME "inputactions")
+set(CPACK_PACKAGE_FILE_NAME "inputactions")
+set(CPACK_PACKAGE_VERSION @PROJECT_VERSION@)
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Linux utility for binding keyboard. mouse, touchpad and touchscreen actions to system actions (KWin compositor plugin implementation)")
+
+set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
+set(CPACK_RPM_COMPONENT_INSTALL ON)

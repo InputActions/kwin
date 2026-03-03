@@ -1,0 +1,246 @@
+name: Build
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths-ignore: [ "**.md" ]
+  schedule:
+    - cron: "0 0 * * *"
+
+permissions: {}
+
+jobs:
+  build_arch_linux:
+    name: Build (Arch Linux)
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:base-devel # zizmor: ignore[unpinned-images]
+      options: --user root
+
+    steps:
+      - name: Refresh Packages
+        run: pacman -Syu --noconfirm
+
+      - name: Install Dependencies
+        run: pacman -S --needed --noconfirm base-devel git extra-cmake-modules qt6-tools kwin yaml-cpp libevdev
+
+      - name: Check out repository
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
+          submodules: 'recursive'
+
+      - name: Configure CMake
+        run: cmake -B "${GITHUB_WORKSPACE}/build"
+
+      - name: Build
+        run: cmake --build "${GITHUB_WORKSPACE}/build" -j$(nproc)
+
+  build_debian_experimental:
+    name: Build (Debian experimental)
+    runs-on: ubuntu-latest
+    container:
+      image: debian:experimental # zizmor: ignore[unpinned-images]
+      options: --user root
+
+    steps:
+      - name: Refresh Packages
+        run: apt-get update
+
+      - name: Upgrade Packages
+        run: apt-get upgrade -y
+
+      - name: Install Dependencies
+        run: apt-get install -y -f git cmake g++ extra-cmake-modules qt6-tools-dev kwin-wayland kwin-dev libkf6configwidgets-dev gettext libkf6kcmutils-dev libyaml-cpp-dev libxkbcommon-dev pkg-config libevdev-dev libdrm-dev
+
+      - name: Check out repository
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
+          submodules: 'recursive'
+
+      - name: Configure CMake
+        run: cmake -B "${GITHUB_WORKSPACE}/build"
+
+      - name: Build
+        run: cmake --build "${GITHUB_WORKSPACE}/build" -j$(nproc)
+
+  build_debian_stable:
+    name: Build (Debian stable)
+    runs-on: ubuntu-latest
+    container:
+      image: debian:stable # zizmor: ignore[unpinned-images]
+      options: --user root
+
+    steps:
+      - name: Refresh Packages
+        run: apt-get update
+
+      - name: Upgrade Packages
+        run: apt-get upgrade -y
+
+      - name: Install Dependencies
+        run: apt-get install -y -f git cmake g++ extra-cmake-modules qt6-tools-dev kwin-wayland kwin-dev libkf6configwidgets-dev gettext libkf6kcmutils-dev libyaml-cpp-dev libxkbcommon-dev pkg-config libevdev-dev libdrm-dev
+
+      - name: Check out repository
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
+          submodules: 'recursive'
+
+      - name: Configure CMake
+        run: cmake -B "${GITHUB_WORKSPACE}/build"
+
+      - name: Build
+        run: cmake --build "${GITHUB_WORKSPACE}/build" -j$(nproc)
+
+  build_fedora_43:
+    name: Build (Fedora 43)
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:43 # zizmor: ignore[unpinned-images]
+      options: --user root
+
+    steps:
+      - name: Install Dependencies
+        run: dnf -y install git cmake extra-cmake-modules gcc-g++ qt6-qtbase-devel kwin-devel kf6-ki18n-devel kf6-kguiaddons-devel kf6-kcmutils-devel kf6-kconfigwidgets-devel qt6-qtbase kf6-kguiaddons kf6-ki18n wayland-devel yaml-cpp yaml-cpp-devel libepoxy-devel libevdev libevdev-devel libdrm-devel
+
+      - name: Check out repository
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
+          submodules: 'recursive'
+
+      - name: Configure CMake
+        run: cmake -B "${GITHUB_WORKSPACE}/build"
+
+      - name: Build
+        run: cmake --build "${GITHUB_WORKSPACE}/build" -j$(nproc)
+
+  build_neon_unstable:
+    name: Build (KDE Neon unstable)
+    runs-on: ubuntu-latest
+    container:
+      image: invent-registry.kde.org/neon/docker-images/plasma:unstable # zizmor: ignore[unpinned-images]
+      options: --user root
+
+    steps:
+      - name: Refresh Packages
+        run: apt update
+
+      - name: Upgrade Packages
+        run: apt upgrade -y --allow-downgrades
+
+      - name: Install Dependencies
+        run: apt install -y git cmake g++ extra-cmake-modules qt6-tools-dev kwin-wayland kwin-dev libkf6configwidgets-dev gettext libkf6kcmutils-dev libyaml-cpp-dev libxkbcommon-dev pkg-config libevdev-dev
+
+      - name: Check out repository
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
+          submodules: 'recursive'
+
+      - name: Configure CMake
+        run: cmake -B "${GITHUB_WORKSPACE}/build"
+
+      - name: Build
+        run: cmake --build "${GITHUB_WORKSPACE}/build" -j$(nproc)
+
+  build_nixos_plasma_6_3:
+    name: Build (NixOS Plasma 6.3)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
+          submodules: 'recursive'
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@fd24c48048070c1be9acd18c9d369a83f0fe94d7 # v31.8.1
+        with:
+          nix_path: nixpkgs=channel:56e3ac24f80cecab5416f104f4289cb0f8eb84c0 # Plasma 6.3.6
+
+      - name: Patch flake.nix
+        run: sed -i -e 's/nixos-unstable/56e3ac24f80cecab5416f104f4289cb0f8eb84c0/g' flake.nix
+
+      - name: Update flake.lock
+        run: nix flake update
+
+      - name: Build
+        run: nix build -L .?submodules=1#inputactions-kwin
+
+  build_nixos_plasma_6_4:
+    name: Build (NixOS Plasma 6.4)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
+          submodules: 'recursive'
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@fd24c48048070c1be9acd18c9d369a83f0fe94d7 # v31.8.1
+        with:
+          nix_path: nixpkgs=channel:904c5e4792fd0f82a3bd083366f4942c1570738f # Plasma 6.4.5
+
+      - name: Patch flake.nix
+        run: sed -i -e 's/nixos-unstable/904c5e4792fd0f82a3bd083366f4942c1570738f/g' flake.nix
+
+      - name: Update flake.lock
+        run: nix flake update
+
+      - name: Build
+        run: nix build -L .?submodules=1#inputactions-kwin
+
+  build_nixos_unstable:
+    name: Build (NixOS unstable)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
+          submodules: 'recursive'
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@fd24c48048070c1be9acd18c9d369a83f0fe94d7 # v31.8.1
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+
+      - name: Update flake.lock
+        run: nix flake update
+
+      - name: Build
+        run: nix build -L .?submodules=1#inputactions-kwin
+
+  build_opensuse_tumbleweed:
+    name: Build (opensuse Tumbleweed)
+    runs-on: ubuntu-latest
+    container:
+      image: opensuse/tumbleweed # zizmor: ignore[unpinned-images]
+      options: --user root
+
+    steps:
+      - name: Refresh Packages
+        run: zypper ref
+
+      - name: Install Dependencies
+        run: zypper in -y git cmake-full gcc-c++ kf6-extra-cmake-modules kf6-kguiaddons-devel kf6-kconfigwidgets-devel kf6-ki18n-devel kf6-kcmutils-devel "cmake(KF6I18n)" "cmake(KF6KCMUtils)" "cmake(KF6WindowSystem)" "cmake(Qt6Core)" "cmake(Qt6DBus)" "cmake(Qt6Quick)" "cmake(Qt6Widgets)" libepoxy-devel kwin6-devel yaml-cpp-devel libxkbcommon-devel libevdev-devel cli11-devel
+
+      - name: Check out repository
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
+          submodules: 'recursive'
+
+      - name: Configure CMake
+        run: cmake -B "${GITHUB_WORKSPACE}/build"
+
+      - name: Build
+        run: cmake --build "${GITHUB_WORKSPACE}/build" -j$(nproc)
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
