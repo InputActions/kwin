@@ -7,7 +7,6 @@ find_package(KF6 REQUIRED COMPONENTS
 set(inputactions_kwin_kcm_SRCS
     kcm.cpp
     kcm.h
-    kcm.qrc
 )
 
 ki18n_wrap_ui(inputactions_kwin_kcm_SRCS kcm.ui)

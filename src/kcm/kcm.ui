@@ -25,21 +25,6 @@
       </attribute>
       <layout class="QVBoxLayout">
        <item>
-        <widget class="QLabel">
-         <property name="text">
-          <string>How to use:
-1. If using a mouse, place the window so that the record button
-is located where you would like to start the stroke
-2. Press record
-3. Perform the stroke using a mouse, touchpad or a touchscreen
-4. If using a mouse, wait a short amount of time after stopping
-movement
-5. Copy the output below and assign it to the strokes property
-of a gesture (it is a list)</string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <layout class="QHBoxLayout">
          <item>
           <widget class="QPushButton" name="recordStroke">
@@ -77,26 +62,6 @@ of a gesture (it is a list)</string>
            <horstretch>0</horstretch>
            <verstretch>1</verstretch>
           </sizepolicy>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget">
-      <attribute name="title">
-       <string>About</string>
-      </attribute>
-      <layout class="QVBoxLayout">
-       <item>
-        <widget class="QTextBrowser" name="aboutText">
-         <property name="readOnly">
-          <bool>true</bool>
-         </property>
-         <property name="openExternalLinks">
-          <bool>true</bool>
-         </property>
-         <property name="text">
-          <string>Failed to load about.html</string>
          </property>
         </widget>
        </item>

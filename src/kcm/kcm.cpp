@@ -34,12 +34,6 @@ KWinGesturesKCM::KWinGesturesKCM(QObject *parent, const KPluginMetaData &data)
     ui.setupUi(widget());
     setButtons(Button::NoAdditionalButton);
 
-    QFile about(":/effects/inputactions_kwin/kcm/about.html");
-    if (about.open(QIODevice::ReadOnly)) {
-        const auto html = about.readAll().replace("${version}", PROJECT_VESION);
-        ui.aboutText->setHtml(html);
-    }
-
     connect(ui.copy, &QPushButton::pressed, this, &KWinGesturesKCM::slotCopyPoints);
     connect(ui.recordStroke, &QPushButton::pressed, this, &KWinGesturesKCM::slotRecordStroke);
 }
