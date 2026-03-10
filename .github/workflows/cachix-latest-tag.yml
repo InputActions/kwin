@@ -1,10 +1,11 @@
-name: Cachix
+name: Cachix (latest tag)
 
 on:
-  push:
-    branches: [ main ]
+  workflow_dispatch:
   schedule:
     - cron: "0 0 * * *"
+  push:
+    tags: [ "*" ]
 
 permissions: {}
 
@@ -17,8 +18,12 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
+          fetch-depth: 0
           persist-credentials: false
           submodules: 'recursive'
+
+      - name: Check out latest tag
+        run: git checkout "$(git describe --tags "$(git rev-list --tags --max-count=1)")"
 
       - name: Install Nix
         uses: cachix/install-nix-action@19effe9fe722874e6d46dd7182e4b8b7a43c4a99 # v31.10.0
@@ -47,8 +52,12 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
+          fetch-depth: 0
           persist-credentials: false
           submodules: 'recursive'
+
+      - name: Check out latest tag
+        run: git checkout "$(git describe --tags "$(git rev-list --tags --max-count=1)")"
 
       - name: Install Nix
         uses: cachix/install-nix-action@19effe9fe722874e6d46dd7182e4b8b7a43c4a99 # v31.10.0
