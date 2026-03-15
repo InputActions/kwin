@@ -22,6 +22,7 @@ set(kwin_gestures_SOURCES
     interfaces/KWinOnScreenMessageManager.cpp
     interfaces/KWinPointer.cpp
     interfaces/KWinSessionLock.cpp
+    interfaces/KWinTextInput.cpp
     interfaces/KWinWindow.cpp
     interfaces/KWinWindowProvider.cpp
     Effect.cpp

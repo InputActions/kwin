@@ -23,7 +23,6 @@
 #include "utils.h"
 #include "workspace.h"
 #include <libinputactions/input/events.h>
-#include <libinputactions/triggers/StrokeTrigger.h>
 
 namespace InputActions
 {
