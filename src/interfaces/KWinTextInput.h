@@ -26,7 +26,10 @@ namespace InputActions
 class KWinTextInput : public TextInput
 {
 public:
-    void writeText(const QString &text);
+    void deleteSurroundingText(uint32_t beforeLength, uint32_t afterLength) override;
+    std::optional<QString> surroundingText() override;
+    std::optional<uint32_t> surroundingTextCursorPosition() override;
+    void writeText(const QString &text) override;
 };
 
 }

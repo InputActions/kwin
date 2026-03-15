@@ -26,22 +26,57 @@
 namespace InputActions
 {
 
+void KWinTextInput::deleteSurroundingText(uint32_t beforeLength, uint32_t afterLength)
+{
+    auto *seat = KWin::waylandServer()->seat();
+    if (auto *v3 = seat->textInputV3(); v3 && v3->isEnabled()) {
+        v3->deleteSurroundingText(beforeLength, afterLength);
+        v3->done();
+    } else if (auto *v2 = seat->textInputV2(); v2 && v2->isEnabled()) {
+        v2->deleteSurroundingText(beforeLength, afterLength);
+    } else if (auto *v1 = seat->textInputV1(); v1 && v1->isEnabled()) {
+        v1->deleteSurroundingText(beforeLength, afterLength);
+    }
+}
+
+std::optional<QString> KWinTextInput::surroundingText()
+{
+    auto *seat = KWin::waylandServer()->seat();
+    if (auto *v3 = seat->textInputV3(); v3 && v3->isEnabled()) {
+        return v3->surroundingText();
+    } else if (auto *v2 = seat->textInputV2(); v2 && v2->isEnabled()) {
+        return v2->surroundingText();
+    } else if (auto *v1 = seat->textInputV1(); v1 && v1->isEnabled()) {
+        return v1->surroundingText();
+    }
+    return {};
+}
+
+std::optional<uint32_t> KWinTextInput::surroundingTextCursorPosition()
+{
+    auto *seat = KWin::waylandServer()->seat();
+    if (auto *v3 = seat->textInputV3(); v3 && v3->isEnabled()) {
+        return std::max(0, v3->surroundingTextCursorPosition());
+    } else if (auto *v2 = seat->textInputV2(); v2 && v2->isEnabled()) {
+        return std::max(0, v2->surroundingTextCursorPosition());
+    } else if (auto *v1 = seat->textInputV1(); v1 && v1->isEnabled()) {
+        return std::max(0, v1->surroundingTextCursorPosition());
+    }
+    return {};
+}
+
 void KWinTextInput::writeText(const QString &text)
 {
     auto *seat = KWin::waylandServer()->seat();
-    auto *v1 = seat->textInputV1();
-    auto *v2 = seat->textInputV2();
-    auto *v3 = seat->textInputV3();
-
-    if (v3->isEnabled()) {
+    if (auto *v3 = seat->textInputV3(); v3 && v3->isEnabled()) {
         v3->sendPreEditString({}, 0, 0);
         v3->commitString(text);
         v3->done();
-    } else if (v2->isEnabled()) {
+    } else if (auto *v2 = seat->textInputV2(); v2 && v2->isEnabled()) {
         v2->commitString(text);
         v2->setPreEditCursor(0);
         v2->preEdit({}, {});
-    } else if (v1->isEnabled()) {
+    } else if (auto *v1 = seat->textInputV1(); v1 && v1->isEnabled()) {
         v1->commitString(text);
         v1->setPreEditCursor(0);
         v1->preEdit({}, {});
