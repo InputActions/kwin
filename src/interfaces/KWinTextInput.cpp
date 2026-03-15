@@ -16,32 +16,36 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "KWinVirtualKeyboard.h"
-#include "utils.h"
-#include <libinputactions/input/backends/InputBackend.h>
+#include "KWinTextInput.h"
+#include <kwin/wayland/seat.h>
+#include <kwin/wayland/textinput_v1.h>
+#include <kwin/wayland/textinput_v2.h>
+#include <kwin/wayland/textinput_v3.h>
+#include <kwin/wayland_server.h>
 
 namespace InputActions
 {
 
-KWinVirtualKeyboard::KWinVirtualKeyboard()
+void KWinTextInput::writeText(const QString &text)
 {
-    KWin::input()->addInputDevice(&m_device);
-}
+    auto *seat = KWin::waylandServer()->seat();
+    auto *v1 = seat->textInputV1();
+    auto *v2 = seat->textInputV2();
+    auto *v3 = seat->textInputV3();
 
-KWinVirtualKeyboard::~KWinVirtualKeyboard()
-{
-    reset();
-    if (auto *input = KWin::input()) {
-        input->removeInputDevice(&m_device);
+    if (v3->isEnabled()) {
+        v3->sendPreEditString({}, 0, 0);
+        v3->commitString(text);
+        v3->done();
+    } else if (v2->isEnabled()) {
+        v2->commitString(text);
+        v2->setPreEditCursor(0);
+        v2->preEdit({}, {});
+    } else if (v1->isEnabled()) {
+        v1->commitString(text);
+        v1->setPreEditCursor(0);
+        v1->preEdit({}, {});
     }
-}
-
-void KWinVirtualKeyboard::keyboardKey(KeyboardKey key, bool state)
-{
-    g_inputBackend->setIgnoreEvents(true);
-    Q_EMIT m_device.keyChanged(key.scanCode(), state ? KWin::KeyboardKeyState::Pressed : KWin::KeyboardKeyState::Released, timestamp(), &m_device);
-    VirtualKeyboard::keyboardKey(key, state);
-    g_inputBackend->setIgnoreEvents(false);
 }
 
 }

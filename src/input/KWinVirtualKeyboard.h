@@ -33,7 +33,6 @@ public:
     KWin::InputDevice *kwinDevice() { return &m_device; }
 
     void keyboardKey(KeyboardKey key, bool state) override;
-    void keyboardText(const QString &text) override;
 
 private:
     class Device : public KWin::InputDevice

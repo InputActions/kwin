@@ -22,6 +22,7 @@
 #include "interfaces/KWinOnScreenMessageManager.h"
 #include "interfaces/KWinPointer.h"
 #include "interfaces/KWinSessionLock.h"
+#include "interfaces/KWinTextInput.h"
 #include "interfaces/KWinWindowProvider.h"
 #include "workspace.h"
 #include <QDir>
@@ -41,6 +42,7 @@ Effect::Effect()
     g_pointerPositionGetter = pointer;
     g_pointerPositionSetter = pointer;
     g_sessionLock = std::make_shared<KWinSessionLock>();
+    g_textInput = std::make_shared<KWinTextInput>();
     g_windowProvider = std::make_shared<KWinWindowProvider>();
 
     setMissingImplementations();

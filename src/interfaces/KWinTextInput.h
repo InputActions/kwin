@@ -16,32 +16,17 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "KWinVirtualKeyboard.h"
-#include "utils.h"
-#include <libinputactions/input/backends/InputBackend.h>
+#pragma once
+
+#include <libinputactions/interfaces/TextInput.h>
 
 namespace InputActions
 {
 
-KWinVirtualKeyboard::KWinVirtualKeyboard()
+class KWinTextInput : public TextInput
 {
-    KWin::input()->addInputDevice(&m_device);
-}
-
-KWinVirtualKeyboard::~KWinVirtualKeyboard()
-{
-    reset();
-    if (auto *input = KWin::input()) {
-        input->removeInputDevice(&m_device);
-    }
-}
-
-void KWinVirtualKeyboard::keyboardKey(KeyboardKey key, bool state)
-{
-    g_inputBackend->setIgnoreEvents(true);
-    Q_EMIT m_device.keyChanged(key.scanCode(), state ? KWin::KeyboardKeyState::Pressed : KWin::KeyboardKeyState::Released, timestamp(), &m_device);
-    VirtualKeyboard::keyboardKey(key, state);
-    g_inputBackend->setIgnoreEvents(false);
-}
+public:
+    void writeText(const QString &text);
+};
 
 }
