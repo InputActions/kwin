@@ -23,7 +23,7 @@ jobs:
           submodules: 'recursive'
 
       - name: Check out latest tag
-        run: git checkout "$(git describe --tags "$(git rev-list --tags --max-count=1)")"
+        run: git checkout "$(git describe --tags "$(git rev-list --tags --max-count=1)")"; git submodule update --init --recursive
 
       - name: Install Nix
         uses: cachix/install-nix-action@19effe9fe722874e6d46dd7182e4b8b7a43c4a99 # v31.10.0
@@ -57,7 +57,7 @@ jobs:
           submodules: 'recursive'
 
       - name: Check out latest tag
-        run: git checkout "$(git describe --tags "$(git rev-list --tags --max-count=1)")"
+        run: git checkout "$(git describe --tags "$(git rev-list --tags --max-count=1)")"; git submodule update --init --recursive
 
       - name: Install Nix
         uses: cachix/install-nix-action@19effe9fe722874e6d46dd7182e4b8b7a43c4a99 # v31.10.0
