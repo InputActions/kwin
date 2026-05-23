@@ -19,11 +19,8 @@
 #include "KWinTextInput.h"
 #include <kwin/wayland/seat.h>
 
-#if __has_include(<kwin/wayland/textinput_v1.h>)
+#ifndef KWIN_6_7_OR_GREATER
 #include <kwin/wayland/textinput_v1.h>
-#define INPUTACTIONS_HAVE_KWIN_TEXTINPUT_V1 1
-#else
-#define INPUTACTIONS_HAVE_KWIN_TEXTINPUT_V1 0
 #endif
 
 #include <kwin/wayland/textinput_v2.h>
@@ -41,7 +38,7 @@ void KWinTextInput::deleteSurroundingText(uint32_t beforeLength, uint32_t afterL
         v3->done();
     } else if (auto *v2 = seat->textInputV2(); v2 && v2->isEnabled()) {
         v2->deleteSurroundingText(beforeLength, afterLength);
-#if INPUTACTIONS_HAVE_KWIN_TEXTINPUT_V1
+#ifndef KWIN_6_7_OR_GREATER
     } else if (auto *v1 = seat->textInputV1(); v1 && v1->isEnabled()) {
         v1->deleteSurroundingText(beforeLength, afterLength);
 #endif
@@ -55,7 +52,7 @@ std::optional<QString> KWinTextInput::surroundingText()
         return v3->surroundingText();
     } else if (auto *v2 = seat->textInputV2(); v2 && v2->isEnabled()) {
         return v2->surroundingText();
-#if INPUTACTIONS_HAVE_KWIN_TEXTINPUT_V1
+#ifndef KWIN_6_7_OR_GREATER
     } else if (auto *v1 = seat->textInputV1(); v1 && v1->isEnabled()) {
         return v1->surroundingText();
 #endif
@@ -70,7 +67,7 @@ std::optional<uint32_t> KWinTextInput::surroundingTextCursorPosition()
         return std::max(0, v3->surroundingTextCursorPosition());
     } else if (auto *v2 = seat->textInputV2(); v2 && v2->isEnabled()) {
         return std::max(0, v2->surroundingTextCursorPosition());
-#if INPUTACTIONS_HAVE_KWIN_TEXTINPUT_V1
+#ifndef KWIN_6_7_OR_GREATER
     } else if (auto *v1 = seat->textInputV1(); v1 && v1->isEnabled()) {
         return std::max(0, v1->surroundingTextCursorPosition());
 #endif
@@ -89,7 +86,7 @@ void KWinTextInput::writeText(const QString &text)
         v2->commitString(text);
         v2->setPreEditCursor(0);
         v2->preEdit({}, {});
-#if INPUTACTIONS_HAVE_KWIN_TEXTINPUT_V1
+#ifndef KWIN_6_7_OR_GREATER
     } else if (auto *v1 = seat->textInputV1(); v1 && v1->isEnabled()) {
         v1->commitString(text);
         v1->setPreEditCursor(0);
