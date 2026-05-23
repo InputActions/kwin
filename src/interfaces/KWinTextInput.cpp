@@ -18,14 +18,13 @@
 
 #include "KWinTextInput.h"
 #include <kwin/wayland/seat.h>
+#include <kwin/wayland/textinput_v2.h>
+#include <kwin/wayland/textinput_v3.h>
+#include <kwin/wayland_server.h>
 
 #ifndef KWIN_6_7_OR_GREATER
 #include <kwin/wayland/textinput_v1.h>
 #endif
-
-#include <kwin/wayland/textinput_v2.h>
-#include <kwin/wayland/textinput_v3.h>
-#include <kwin/wayland_server.h>
 
 namespace InputActions
 {
