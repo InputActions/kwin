@@ -27,7 +27,7 @@
 #include "workspace.h"
 #include <QDir>
 #include <libinputactions/config/ConfigLoader.h>
-#include <libinputactions/variables/VariableManager.h>
+#include <libinputactions/variables/VariableRegistry.h>
 
 namespace InputActions
 {
@@ -55,13 +55,13 @@ void Effect::reconfigure(ReconfigureFlags flags)
     g_configLoader->load();
 }
 
-void Effect::registerGlobalVariables(VariableManager *variableManager, std::shared_ptr<PointerPositionGetter> pointerPositionGetter,
+void Effect::registerGlobalVariables(VariableRegistry *variableRegistry, std::shared_ptr<PointerPositionGetter> pointerPositionGetter,
                                      std::shared_ptr<WindowProvider> windowProvider)
 {
-    InputActionsMain::registerGlobalVariables(variableManager);
+    InputActionsMain::registerGlobalVariables(variableRegistry);
 
     // Some of this should be moved to libinputactions eventually
-    variableManager->registerRemoteVariable<bool>("plasma_overview_active", [](auto &value) {
+    variableRegistry->registerComputed<bool>("plasma_overview_active", [](auto &value) {
         // Overview is a plugin and headers are not provided, I think the best way right now is to check for the presence of a QObject property, as the effect
         // does fortunately have them.
         if (const auto *effect = dynamic_cast<KWin::Effect *>(KWin::effects->activeFullScreenEffect())) {
@@ -70,7 +70,7 @@ void Effect::registerGlobalVariables(VariableManager *variableManager, std::shar
             value = false;
         }
     });
-    variableManager->registerRemoteVariable<QString>("screen_name", [](auto &value) {
+    variableRegistry->registerComputed<QString>("screen_name", [](auto &value) {
         if (const auto *output = KWin::workspace()->activeOutput()) {
             value = output->name();
         }
