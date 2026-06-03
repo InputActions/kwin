@@ -130,7 +130,7 @@ void KWinInputDevice::restoreVirtualDeviceState()
     m_backend->setIgnoreEvents(false);
 }
 
-void KWinInputDevice::touchscreenTapDown(const std::vector<QPointF> &points)
+void KWinInputDevice::touchscreenTapDown(const std::vector<PointF> &points)
 {
     m_backend->setIgnoreEvents(true);
 
@@ -142,7 +142,7 @@ void KWinInputDevice::touchscreenTapDown(const std::vector<QPointF> &points)
     m_backend->setIgnoreEvents(false);
 }
 
-void KWinInputDevice::touchscreenTapUp(const std::vector<QPointF> &points)
+void KWinInputDevice::touchscreenTapUp(const std::vector<PointF> &points)
 {
     m_backend->setIgnoreEvents(true);
 

@@ -48,7 +48,7 @@ void KWinVirtualMouse::mouseButton(MouseButton button, bool state)
     g_inputBackend->setIgnoreEvents(false);
 }
 
-void KWinVirtualMouse::mouseMotion(const QPointF &pos)
+void KWinVirtualMouse::mouseMotion(const PointF &pos)
 {
     g_inputBackend->setIgnoreEvents(true);
     Q_EMIT m_device.pointerMotion(pos, pos, timestamp(), &m_device);
@@ -56,7 +56,7 @@ void KWinVirtualMouse::mouseMotion(const QPointF &pos)
     g_inputBackend->setIgnoreEvents(false);
 }
 
-void KWinVirtualMouse::mouseWheel(const QPointF &delta)
+void KWinVirtualMouse::mouseWheel(const PointF &delta)
 {
     g_inputBackend->setIgnoreEvents(true);
     if (delta.x()) {

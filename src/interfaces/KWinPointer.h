@@ -33,10 +33,10 @@ class KWinPointer
 public:
     std::optional<CursorShape> cursorShape() override;
 
-    std::optional<QPointF> globalPointerPosition() override;
-    std::optional<QPointF> screenPointerPosition() override;
+    std::optional<PointF> globalPointerPosition() override;
+    std::optional<PointF> screenPointerPosition() override;
 
-    void setGlobalPointerPosition(const QPointF &value) override;
+    void setGlobalPointerPosition(const PointF &value) override;
 
 private:
     std::optional<CursorShape> m_cachedShape;

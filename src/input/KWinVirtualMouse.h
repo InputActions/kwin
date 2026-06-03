@@ -33,8 +33,8 @@ public:
     KWin::InputDevice *kwinDevice() { return &m_device; }
 
     void mouseButton(MouseButton button, bool state) override;
-    void mouseMotion(const QPointF &pos) override;
-    void mouseWheel(const QPointF &delta) override;
+    void mouseMotion(const PointF &pos) override;
+    void mouseWheel(const PointF &delta) override;
 
 private:
     class Device : public KWin::InputDevice

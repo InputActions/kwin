@@ -197,7 +197,7 @@ bool KWinInputBackend::pinchGestureCancelled(std::chrono::microseconds time)
 
 bool KWinInputBackend::pointerAxis(KWin::PointerAxisEvent *event)
 {
-    auto delta = event->orientation == Qt::Orientation::Horizontal ? QPointF(event->delta, 0) : QPointF(0, event->delta);
+    auto delta = event->orientation == Qt::Orientation::Horizontal ? PointF(event->delta, 0) : PointF(0, event->delta);
     if (event->inverted) {
         delta *= -1;
     }
@@ -228,8 +228,8 @@ bool KWinInputBackend::touchDown(KWin::TouchDownEvent *event)
     }
 
     auto *output = KWin::workspace()->outputAt(event->pos);
-    const QPointF position((event->pos.x() - output->geometry().x()) / output->geometry().width() * sender->properties().size().width(),
-                           (event->pos.y() - output->geometry().y()) / output->geometry().height() * sender->properties().size().height());
+    const PointF position((event->pos.x() - output->geometry().x()) / output->geometry().width() * sender->properties().size().width(),
+                          (event->pos.y() - output->geometry().y()) / output->geometry().height() * sender->properties().size().height());
     return touchscreenTouchDown(sender, event->id, position, event->pos);
 }
 
@@ -241,8 +241,8 @@ bool KWinInputBackend::touchMotion(KWin::TouchMotionEvent *event)
     }
 
     auto *output = KWin::workspace()->outputAt(event->pos);
-    const QPointF position((event->pos.x() - output->geometry().x()) / output->geometry().width() * sender->properties().size().width(),
-                           (event->pos.y() - output->geometry().y()) / output->geometry().height() * sender->properties().size().height());
+    const PointF position((event->pos.x() - output->geometry().x()) / output->geometry().width() * sender->properties().size().width(),
+                          (event->pos.y() - output->geometry().y()) / output->geometry().height() * sender->properties().size().height());
     return touchscreenTouchMotion(sender, event->id, position, event->pos);
 }
 
