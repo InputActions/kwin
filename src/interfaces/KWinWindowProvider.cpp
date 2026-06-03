@@ -49,7 +49,7 @@ std::shared_ptr<Window> KWinWindowProvider::windowUnderFingers()
         return {};
     }
 
-    QPointF center;
+    PointF center;
     for (const auto &touchPoint : validTouchPoints) {
         center += touchPoint->rawPosition;
     }

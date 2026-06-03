@@ -54,14 +54,14 @@ std::optional<CursorShape> KWinPointer::cursorShape()
     return {};
 }
 
-std::optional<QPointF> KWinPointer::globalPointerPosition()
+std::optional<PointF> KWinPointer::globalPointerPosition()
 {
     return KWin::input()->pointer()->pos();
 }
 
-std::optional<QPointF> KWinPointer::screenPointerPosition()
+std::optional<PointF> KWinPointer::screenPointerPosition()
 {
-    QPointF position;
+    PointF position;
     const auto rawPosition = KWin::input()->pointer()->pos();
     for (const auto &output : KWin::workspace()->outputs()) {
         const auto geometry = output->geometryF();
@@ -76,7 +76,7 @@ std::optional<QPointF> KWinPointer::screenPointerPosition()
     return position;
 }
 
-void KWinPointer::setGlobalPointerPosition(const QPointF &position)
+void KWinPointer::setGlobalPointerPosition(const PointF &position)
 {
     auto *device = dynamic_cast<KWinInputBackend *>(g_inputBackend.get())->kwinVirtualMouse()->kwinDevice();
     g_inputBackend->setIgnoreEvents(true);
