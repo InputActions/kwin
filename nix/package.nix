@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "inputactions-kwin";
-  version = "0.9.1.1";
+  version = "0.9.2.0";
 
   src = ./..;
 
