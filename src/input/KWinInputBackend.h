@@ -49,7 +49,6 @@ public:
      */
     KWinVirtualMouse *kwinVirtualMouse();
 
-    void initialize() override;
     void reset() final;
 
     void clearKeyboardModifiers() override;
@@ -98,6 +97,9 @@ public:
 
     void touchpadPinchBlockingStopped(uint32_t fingers) override;
     void touchpadSwipeBlockingStopped(uint32_t fingers) override;
+
+protected:
+    void doInitialize() override;
 
 private:
     void kwinDeviceAdded(KWin::InputDevice *kwinDevice);
