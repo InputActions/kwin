@@ -44,9 +44,9 @@ KWinInputBackend::~KWinInputBackend()
     }
 }
 
-void KWinInputBackend::initialize()
+void KWinInputBackend::doInitialize()
 {
-    LibinputInputBackend::initialize();
+    LibinputInputBackend::doInitialize();
 
     m_virtualKeyboard.emplace();
     m_virtualMouse.emplace();
