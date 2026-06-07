@@ -20,6 +20,7 @@
 #include "core/output.h"
 #include "effect/effecthandler.h"
 #include "window.h"
+#include "workspace.h"
 
 namespace InputActions
 {
@@ -27,6 +28,11 @@ namespace InputActions
 KWinWindow::KWinWindow(KWin::Window *window)
     : m_window(window)
 {
+}
+
+void KWinWindow::activate()
+{
+    KWin::workspace()->activateWindow(m_window);
 }
 
 std::optional<QString> KWinWindow::id()

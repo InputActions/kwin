@@ -42,6 +42,8 @@ public:
     std::optional<bool> maximized() override;
     std::optional<bool> fullscreen() override;
 
+    void activate() override;
+
 private:
     KWin::Window *m_window;
 };
