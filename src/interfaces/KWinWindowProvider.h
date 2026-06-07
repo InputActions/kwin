@@ -31,6 +31,8 @@ public:
     std::shared_ptr<Window> activeWindow() override;
     std::shared_ptr<Window> windowUnderFingers() override;
     std::shared_ptr<Window> windowUnderPointer() override;
+
+    std::shared_ptr<Window> findWindowById(const QString &id) override;
 };
 
 }

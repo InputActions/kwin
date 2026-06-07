@@ -20,6 +20,7 @@
 #include "KWinWindow.h"
 #include "effect/effecthandler.h"
 #include "workspace.h"
+#include <QUuid>
 #include <libinputactions/input/backends/InputBackend.h>
 #include <libinputactions/input/devices/InputDevice.h>
 #include <libinputactions/input/devices/InputDeviceState.h>
@@ -67,6 +68,14 @@ std::shared_ptr<Window> KWinWindowProvider::windowUnderFingers()
 std::shared_ptr<Window> KWinWindowProvider::windowUnderPointer()
 {
     if (auto *window = KWin::workspace()->windowUnderMouse(KWin::workspace()->activeOutput())) {
+        return std::make_shared<KWinWindow>(window);
+    }
+    return {};
+}
+
+std::shared_ptr<Window> KWinWindowProvider::findWindowById(const QString &id)
+{
+    if (auto *window = KWin::workspace()->findWindow(QUuid::fromString(id))) {
         return std::make_shared<KWinWindow>(window);
     }
     return {};
