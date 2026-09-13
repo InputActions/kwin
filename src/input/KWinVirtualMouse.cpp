@@ -60,10 +60,28 @@ void KWinVirtualMouse::mouseWheel(const PointF &delta)
 {
     g_inputBackend->setIgnoreEvents(true);
     if (delta.x()) {
-        Q_EMIT m_device.pointerAxisChanged(KWin::PointerAxis::Horizontal, delta.x(), delta.x(), KWin::PointerAxisSource::Wheel, false, timestamp(), &m_device);
+        Q_EMIT m_device.pointerAxisChanged(KWin::PointerAxis::Horizontal,
+                                           delta.x(),
+                                           delta.x(),
+                                           KWin::PointerAxisSource::Wheel,
+                                           false,
+#ifdef KWIN_6_8_OR_GREATER
+                                           false, /* autoscroll */
+#endif
+                                           timestamp(),
+                                           &m_device);
     }
     if (delta.y()) {
-        Q_EMIT m_device.pointerAxisChanged(KWin::PointerAxis::Vertical, delta.y(), delta.y(), KWin::PointerAxisSource::Wheel, false, timestamp(), &m_device);
+        Q_EMIT m_device.pointerAxisChanged(KWin::PointerAxis::Vertical,
+                                           delta.y(),
+                                           delta.y(),
+                                           KWin::PointerAxisSource::Wheel,
+                                           false,
+#ifdef KWIN_6_8_OR_GREATER
+                                           false, /* autoscroll */
+#endif
+                                           timestamp(),
+                                           &m_device);
     }
     Q_EMIT m_device.pointerFrame(&m_device);
     g_inputBackend->setIgnoreEvents(false);
