@@ -14,6 +14,9 @@ endif()
 if(${KWin_VERSION} VERSION_GREATER_EQUAL 6.6.80)
     add_compile_definitions(KWIN_6_7_OR_GREATER)
 endif()
+if(${KWin_VERSION} VERSION_GREATER_EQUAL 6.7.80)
+    add_compile_definitions(KWIN_6_8_OR_GREATER)
+endif()
 
 find_package(XKB REQUIRED)
 
