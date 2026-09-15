@@ -32,7 +32,8 @@ public:
 
     KWin::InputDevice *kwinDevice() { return &m_device; }
 
-    void keyboardKey(KeyboardKey key, bool state) override;
+protected:
+    void doKeyboardKey(KeyboardKey key, bool state) override;
 
 private:
     class Device : public KWin::InputDevice

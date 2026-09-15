@@ -18,7 +18,6 @@
 
 #include "KWinVirtualMouse.h"
 #include "utils.h"
-#include <libinputactions/input/backends/InputBackend.h>
 
 namespace InputActions
 {
@@ -36,29 +35,23 @@ KWinVirtualMouse::~KWinVirtualMouse()
     }
 }
 
-void KWinVirtualMouse::mouseButton(MouseButton button, bool state)
+void KWinVirtualMouse::doMouseButton(MouseButton button, bool state)
 {
-    g_inputBackend->setIgnoreEvents(true);
     Q_EMIT m_device.pointerButtonChanged(button.scanCode(),
                                          state ? KWin::PointerButtonState::Pressed : KWin::PointerButtonState::Released,
                                          timestamp(),
                                          &m_device);
     Q_EMIT m_device.pointerFrame(&m_device);
-    VirtualMouse::mouseButton(button, state);
-    g_inputBackend->setIgnoreEvents(false);
 }
 
-void KWinVirtualMouse::mouseMotion(const PointF &pos)
+void KWinVirtualMouse::doMouseMotion(const PointF &pos)
 {
-    g_inputBackend->setIgnoreEvents(true);
     Q_EMIT m_device.pointerMotion(pos, pos, timestamp(), &m_device);
     Q_EMIT m_device.pointerFrame(&m_device);
-    g_inputBackend->setIgnoreEvents(false);
 }
 
-void KWinVirtualMouse::mouseWheel(const PointF &delta)
+void KWinVirtualMouse::doMouseWheel(const PointF &delta)
 {
-    g_inputBackend->setIgnoreEvents(true);
     if (delta.x()) {
         Q_EMIT m_device.pointerAxisChanged(KWin::PointerAxis::Horizontal,
                                            delta.x(),
@@ -84,7 +77,6 @@ void KWinVirtualMouse::mouseWheel(const PointF &delta)
                                            &m_device);
     }
     Q_EMIT m_device.pointerFrame(&m_device);
-    g_inputBackend->setIgnoreEvents(false);
 }
 
 }

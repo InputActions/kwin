@@ -18,7 +18,6 @@
 
 #include "KWinVirtualKeyboard.h"
 #include "utils.h"
-#include <libinputactions/input/backends/InputBackend.h>
 
 namespace InputActions
 {
@@ -36,12 +35,9 @@ KWinVirtualKeyboard::~KWinVirtualKeyboard()
     }
 }
 
-void KWinVirtualKeyboard::keyboardKey(KeyboardKey key, bool state)
+void KWinVirtualKeyboard::doKeyboardKey(KeyboardKey key, bool state)
 {
-    g_inputBackend->setIgnoreEvents(true);
     Q_EMIT m_device.keyChanged(key.scanCode(), state ? KWin::KeyboardKeyState::Pressed : KWin::KeyboardKeyState::Released, timestamp(), &m_device);
-    VirtualKeyboard::keyboardKey(key, state);
-    g_inputBackend->setIgnoreEvents(false);
 }
 
 }
