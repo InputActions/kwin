@@ -28,7 +28,7 @@ namespace InputActions
 {
 
 KWinInputBackend::KWinInputBackend()
-    : InputEventFilter(KWin::InputFilterOrder::ScreenEdge)
+    : InputEventFilter(KWin::InputFilterOrder::LockScreen)
     , m_input(KWin::input())
 {
     m_input->installInputEventFilter(this);
