@@ -26,6 +26,7 @@ set(kwin_gestures_SOURCES
     input/KWinVirtualKeyboard.cpp
     input/KWinVirtualMouse.cpp
     interfaces/KWinOnScreenMessageManager.cpp
+    interfaces/KWinOverlayManager.cpp
     interfaces/KWinPointer.cpp
     interfaces/KWinSessionLock.cpp
     interfaces/KWinTextInput.cpp
