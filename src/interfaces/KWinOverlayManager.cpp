@@ -26,12 +26,7 @@ namespace InputActions
 
 KWinOverlayManager::KWinOverlayManager()
 {
-    auto *workspace = KWin::workspace();
-    for (auto *window : workspace->stackingOrder()) {
-        onWindowAdded(window);
-    }
-    connect(workspace, &KWin::Workspace::windowAdded, this, &KWinOverlayManager::onWindowAdded);
-    connect(workspace, &KWin::Workspace::windowRemoved, this, &KWinOverlayManager::onWindowRemoved);
+    connect(KWin::workspace(), &KWin::Workspace::windowAdded, this, &KWinOverlayManager::onWindowAdded);
 }
 
 void KWinOverlayManager::onWindowAdded(KWin::Window *window)
@@ -40,25 +35,11 @@ void KWinOverlayManager::onWindowAdded(KWin::Window *window)
         return;
     }
 
-    if (m_overlay) {
-        disconnect(m_overlay, nullptr, this, nullptr);
-    }
-
-    connect(window, &KWin::Window::frameGeometryChanged, this, [window](const auto &) {
-        auto *pointer = KWin::input()->pointer();
-        auto *windowUnderPointer = KWin::workspace()->windowUnderMouse(KWin::workspace()->activeOutput());
-
-        if (pointer->focus() != window && windowUnderPointer == window) {
-            pointer->setFocus(window);
-        }
-    });
-    m_overlay = window;
-}
-
-void KWinOverlayManager::onWindowRemoved(KWin::Window *window)
-{
-    if (window == m_overlay) {
-        m_overlay = {};
+    auto *pointer = KWin::input()->pointer();
+    if (pointer->focus() != window) {
+        // KWin blocks pointer focus updates when a button is pressed before it forwards the event to InputActions' filter and regardless of whether a filter
+        // blocks it, so it's required to manually focus the overlay.
+        pointer->setFocus(window);
     }
 }
 
