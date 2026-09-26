@@ -37,10 +37,6 @@ public:
 
 private slots:
     void onWindowAdded(KWin::Window *window);
-    void onWindowRemoved(KWin::Window *window);
-
-private:
-    KWin::Window *m_overlay{};
 };
 
 }
