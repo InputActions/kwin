@@ -30,6 +30,7 @@ namespace InputActions
 KWinInputBackend::KWinInputBackend()
     : InputEventFilter(KWin::InputFilterOrder::LockScreen)
     , m_input(KWin::input())
+    , m_cursor(KWin::Cursors::self()->mouse())
 {
     m_input->installInputEventFilter(this);
     m_input->installInputEventSpy(&m_keyboardModifierSpy);
@@ -55,6 +56,9 @@ void KWinInputBackend::doInitialize()
     for (auto *device : KWin::input()->devices()) {
         kwinDeviceAdded(device);
     }
+
+    connect(m_cursor, &KWin::Cursor::posChanged, this, &KWinInputBackend::onCursorPositionChanged);
+    m_currentCursorPosition = m_previousCursorPosition = m_cursor->pos();
 }
 
 void KWinInputBackend::reset()
@@ -63,6 +67,7 @@ void KWinInputBackend::reset()
     m_virtualMouse.reset();
 
     disconnect(m_input, nullptr, this, nullptr);
+    disconnect(m_cursor, nullptr, this, nullptr);
     for (auto &device : m_devices) {
         removeDevice(device.get());
     }
@@ -211,7 +216,14 @@ bool KWinInputBackend::pointerButton(KWin::PointerButtonEvent *event)
 
 bool KWinInputBackend::pointerMotion(KWin::PointerMotionEvent *event)
 {
-    return LibinputInputBackend::pointerMotion(findDevice(event->device), {event->delta, event->deltaUnaccelerated});
+    PointDelta delta;
+    if (event->delta.isNull()) { // Absolute motion
+        delta = {m_currentCursorPosition - m_previousCursorPosition};
+    } else {
+        delta = {event->delta, event->deltaUnaccelerated};
+    }
+
+    return LibinputInputBackend::pointerMotion(findDevice(event->device), delta);
 }
 
 bool KWinInputBackend::keyboardKey(KWin::KeyboardKeyEvent *event)
@@ -342,6 +354,12 @@ KWinInputDevice *KWinInputBackend::findDevice(KWin::InputDevice *kwinDevice)
         }
     }
     return {};
+}
+
+void KWinInputBackend::onCursorPositionChanged(const QPointF &newPosition)
+{
+    m_previousCursorPosition = m_currentCursorPosition;
+    m_currentCursorPosition = newPosition;
 }
 
 VirtualKeyboard *KWinInputBackend::virtualKeyboard()

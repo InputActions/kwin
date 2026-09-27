@@ -20,6 +20,7 @@
 
 #include "KWinVirtualKeyboard.h"
 #include "KWinVirtualMouse.h"
+#include "cursor.h"
 #include "input.h"
 #include "input_event_spy.h"
 #include <libinputactions/input/backends/LibinputInputBackend.h>
@@ -106,10 +107,16 @@ private:
     void kwinDeviceRemoved(const KWin::InputDevice *kwinDevice);
     KWinInputDevice *findDevice(KWin::InputDevice *kwinDevice);
 
+    void onCursorPositionChanged(const QPointF &newPosition);
+
     KWin::InputRedirection *m_input;
     std::vector<std::unique_ptr<KWinInputDevice>> m_devices;
     std::optional<KWinVirtualKeyboard> m_virtualKeyboard;
     std::optional<KWinVirtualMouse> m_virtualMouse;
+
+    KWin::Cursor *m_cursor;
+    QPointF m_currentCursorPosition;
+    QPointF m_previousCursorPosition;
 
     class KeyboardModifierSpy : public KWin::InputEventSpy
     {
