@@ -36,7 +36,13 @@ public:
     KWinOverlayManager();
 
 private slots:
+    void onCursorPosChanged(const QPointF &pos);
     void onWindowAdded(KWin::Window *window);
+
+private:
+    void focusOverlay(KWin::Window *window) const;
+
+    static bool isOverlayWindow(KWin::Window *window);
 };
 
 }
