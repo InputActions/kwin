@@ -25,6 +25,8 @@
 #include "interfaces/KWinSessionLock.h"
 #include "interfaces/KWinTextInput.h"
 #include "interfaces/KWinWindowProvider.h"
+#include "wayland/display.h"
+#include "wayland_server.h"
 #include "workspace.h"
 #include <QDir>
 #include <libinputactions/config/ConfigLoader.h>
@@ -48,8 +50,18 @@ Effect::Effect()
     g_windowProvider = std::make_shared<KWinWindowProvider>();
 
     setMissingImplementations();
-    initialize();
-    g_configLoader->load();
+    const auto init = [this]() {
+        initialize();
+        g_configLoader->load();
+    };
+
+    auto *display = KWin::waylandServer()->display();
+    if (display->isRunning()) {
+        init();
+    } else {
+        // Wait for the Wayland server to be started and environment variables to be set before loading a config that could spawn the overlay
+        KWin::Effect::connect(display, &KWin::Display::runningChanged, static_cast<KWin::Effect *>(this), init, Qt::SingleShotConnection);
+    }
 }
 
 void Effect::reconfigure(ReconfigureFlags flags)
